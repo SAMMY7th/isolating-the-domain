@@ -1,5 +1,6 @@
 package example.domain.type.time;
 
+import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 import java.time.DateTimeException;
 
@@ -7,6 +8,8 @@ import java.time.DateTimeException;
  * 分(数)
  */
 public class Minute {
+
+    @Min(value = 0, message = "分が負の値になっています")
     int value;
 
     @Deprecated

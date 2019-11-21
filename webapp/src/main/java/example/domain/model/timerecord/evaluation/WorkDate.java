@@ -4,11 +4,16 @@ import example.domain.type.date.Date;
 import example.domain.type.date.DayOfWeek;
 import example.domain.type.date.WeekOfMonth;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 /**
  * 勤務日付
  */
 public class WorkDate {
 
+    @NotNull
+    @Valid
     Date value;
 
     @Deprecated
@@ -50,5 +55,9 @@ public class WorkDate {
 
     public Date toDate() {
         return value;
+    }
+
+    public boolean isEmpty() {
+        return this.value.value() == null;
     }
 }

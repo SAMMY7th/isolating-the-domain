@@ -17,10 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import java.time.LocalDate;
-import java.util.Set;
 
 /**
  * 勤務時間の登録
@@ -33,20 +30,16 @@ public class TimeRecordRegisterController {
     TimeRecordRecordService timeRecordRecordService;
     TimeRecordCoordinator timeRecordCoordinator;
     TimeRecordQueryCoordinator timeRecordQueryCoordinator;
-    Validator validator;
 
     public TimeRecordRegisterController(
             EmployeeQueryService employeeQueryService,
             TimeRecordRecordService timeRecordRecordService,
             TimeRecordCoordinator timeRecordCoordinator,
-            TimeRecordQueryCoordinator timeRecordQueryCoordinator,
-            Validator validator) {
+            TimeRecordQueryCoordinator timeRecordQueryCoordinator) {
         this.employeeQueryService = employeeQueryService;
         this.timeRecordRecordService = timeRecordRecordService;
         this.timeRecordCoordinator = timeRecordCoordinator;
         this.timeRecordQueryCoordinator = timeRecordQueryCoordinator;
-
-        this.validator = validator;
     }
 
     @ModelAttribute("employees")
@@ -65,12 +58,6 @@ public class TimeRecordRegisterController {
                 @RequestParam(value = "workDate", required = false) WorkDate workDate,
                 @ModelAttribute AttendanceForm attendanceForm,
                 Model model) {
-        if (employeeNumber != null) {
-            attendanceForm.employeeNumber = employeeNumber;
-        }
-        if (workDate != null) {
-            attendanceForm.workDate = workDate.toString();
-        }
         if (employeeNumber != null && workDate != null) {
             TimeRecord timeRecord = timeRecordQueryCoordinator.timeRecord(employeeNumber, workDate);
             attendanceForm.apply(timeRecord);
@@ -86,12 +73,6 @@ public class TimeRecordRegisterController {
                     BindingResult result) {
         if (result.hasErrors()) return "timerecord/form";
         TimeRecord timeRecord = attendanceForm.toTimeRecord();
-
-        Set<ConstraintViolation<TimeRecord>> violations = validator.validate(timeRecord);
-        violations.forEach(violation -> {
-            // FIXME: 今は休憩時間しかチェックしていないのでとりあえず動かしている
-            result.rejectValue("daytimeBreakTime", "", violation.getMessage());
-        });
 
         timeRecordCoordinator.isValid(timeRecord).errors().forEach(error -> {
             result.rejectValue(error.field(), "", error.message());
@@ -109,14 +90,14 @@ public class TimeRecordRegisterController {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.setAllowedFields(
-                "employeeNumber",
-                "workDate",
-                "startHour",
-                "startMinute",
-                "endHour",
-                "endMinute",
-                "daytimeBreakTime",
-                "nightBreakTime"
+                "employeeNumber.value",
+                "actualWorkDateTimeForm.workRangeForm.workDate.value.value",
+                "actualWorkDateTimeForm.workRangeForm.startTimeForm.hour",
+                "actualWorkDateTimeForm.orkRangeForm.startTimeForm.minute",
+                "actualWorkDateTimeForm.workRangeForm.endTimeForm.hour",
+                "actualWorkDateTimeForm.workRangeForm.endTimeForm.minute",
+                "actualWorkDateTimeForm.daytimeBreakTime.value.value",
+                "actualWorkDateTimeForm.nightBreakTime.value.value"
         );
     }
 }

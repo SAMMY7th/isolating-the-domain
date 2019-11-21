@@ -66,34 +66,38 @@ class TimeRecordRegisterControllerTest {
         doNothing().when(timeRecordRepository).registerTimeRecord(any());
 
         mockMvc.perform(post("/timerecord")
-                .param("employeeNumber", "1")
-                .param("workDate", "2018-01-01")
-                .param("startHour", "9")
-                .param("startMinute", "00")
-                .param("endHour", "17")
-                .param("endMinute", "30")
-                .param("daytimeBreakTime", "0")
-                .param("nightBreakTime", "0")
+                .param("employeeNumber.value", "1")
+                .param("actualWorkDateTimeForm.workRangeForm.workDate.value.value", "2018-01-01")
+                .param("actualWorkDateTimeForm.workRangeForm.startTimeForm.hour", "9")
+                .param("actualWorkDateTimeForm.orkRangeForm.startTimeForm.minute", "00")
+                .param("actualWorkDateTimeForm.workRangeForm.endTimeForm.hour", "17")
+                .param("actualWorkDateTimeForm.workRangeForm.endTimeForm.minute", "30")
+                .param("actualWorkDateTimeForm.daytimeBreakTime.value.value", "0")
+                .param("actualWorkDateTimeForm.nightBreakTime.value.value", "0")
         )
                 .andExpect(redirectedUrlPattern("/attendances/1/*"));
     }
 
     @CsvSource(value = {
-            "        '', 10,00, 17,30,  0,  0, workDateComplete",
-            "xxxx-01-01, 10,00, 17,30,  0,  0, workDateValid",
-            "2019-01-01, '',00, 17,30,  0,  0, startTimeComplete",
-            "2019-01-01, 10,'', 17,30,  0,  0, startTimeComplete",
-            "2019-01-01,  x,00, 17,30,  0,  0, startTimeValid",
-            "2019-01-01, 10, x, 17,30,  0,  0, startTimeValid",
-            "2019-01-01, 10,00, '',30,  0,  0, endTimeComplete",
-            "2019-01-01, 10,00, 17,'',  0,  0, endTimeComplete",
-            "2019-01-01, 10,00,  x,30,  0,  0, endTimeValid",
-            "2019-01-01, 10,00, 17, x,  0,  0, endTimeValid",
-            "2019-01-01, 20,00, 17,30,  0,  0, workTimeValid", // 開始 > 終了
-            "2019-01-01, 10,00, 17,30,  x,  0, daytimeBreakTime",
-            "2019-01-01, 10,00, 10,30, 90,  0, daytimeBreakTime", // over
-            "2019-01-01, 10,00, 23,30,  0,  x, nightBreakTimeValid",
-            "2019-01-01, 10,00, 13,30,  0, 90, nightBreakTimeValid", // over
+            "        '', 10,00, 17,30,  0,  0, actualWorkDateTimeForm.workRangeForm.workDate.value.value",
+            "xxxx-01-01, 10,00, 17,30,  0,  0, actualWorkDateTimeForm.workRangeForm.workDate.value.value",
+            "2019-01-01, '',00, 17,30,  0,  0, actualWorkDateTimeForm.workRangeForm.startTimeForm.hour",
+            "2019-01-01, 10,'', 17,30,  0,  0, actualWorkDateTimeForm.workRangeForm.startTimeForm.minute",
+            "2019-01-01,  x,00, 17,30,  0,  0, actualWorkDateTimeForm.workRangeForm.startTimeForm.hour",
+            "2019-01-01, 10, x, 17,30,  0,  0, actualWorkDateTimeForm.workRangeForm.startTimeForm.minute",
+            "2019-01-01, -1,00, 17,30,  0,  0, actualWorkDateTimeForm.workRangeForm.startTimeForm.startTimeValid",
+            "2019-01-01, 10, -1, 17,30,  0,  0, actualWorkDateTimeForm.workRangeForm.startTimeForm.startTimeValid",
+            "2019-01-01, 10,00, '',30,  0,  0, actualWorkDateTimeForm.workRangeForm.endTimeForm.hour",
+            "2019-01-01, 10,00, 17,'',  0,  0, actualWorkDateTimeForm.workRangeForm.endTimeForm.minute",
+            "2019-01-01, 10,00,  x,30,  0,  0, actualWorkDateTimeForm.workRangeForm.endTimeForm.hour",
+            "2019-01-01, 10,00, 17, x,  0,  0, actualWorkDateTimeForm.workRangeForm.endTimeForm.minute",
+            "2019-01-01, 10,00, -1,30,  0,  0, actualWorkDateTimeForm.workRangeForm.endTimeForm.endTimeValid",
+            "2019-01-01, 10,00, 17, -1,  0,  0, actualWorkDateTimeForm.workRangeForm.endTimeForm.endTimeValid",
+            "2019-01-01, 20,00, 17,30,  0,  0, actualWorkDateTimeForm.workRangeForm.workTimeValid", // 開始 > 終了
+            "2019-01-01, 10,00, 17,30,  x,  0, actualWorkDateTimeForm.daytimeBreakTime",
+            "2019-01-01, 10,00, 10,30, 90,  0, actualWorkDateTimeForm.daytimeBreakTimeValid", // over
+            "2019-01-01, 10,00, 23,30,  0,  x, actualWorkDateTimeForm.nightBreakTime",
+            "2019-01-01, 10,00, 13,30,  0, 90, actualWorkDateTimeForm.nightBreakTimeValid", // over
             "2019-01-02, 8,59, 21,00,  0, 0, overlapWithPreviousWorkRange",
             "2019-01-02, 10,00, 33,01,  0, 0, overlapWithNextWorkRange",
     })
@@ -109,14 +113,14 @@ class TimeRecordRegisterControllerTest {
                                 AttendanceForm.toActualWorkDateTime("2019-01-03", "9:00", "21:00", "0", "0")))));
 
         mockMvc.perform(post("/timerecord")
-                .param("employeeNumber", "1")
-                .param("workDate", workDate)
-                .param("startHour", startHour)
-                .param("startMinute", startMinute)
-                .param("endHour", endHour)
-                .param("endMinute", endMinute)
-                .param("daytimeBreakTime", daytimeBreakTime)
-                .param("nightBreakTime", nightBreakTime)
+                .param("employeeNumber.value", "1")
+                .param("actualWorkDateTimeForm.workRangeForm.workDate.value.value", workDate)
+                .param("actualWorkDateTimeForm.workRangeForm.startTimeForm.hour", startHour)
+                .param("actualWorkDateTimeForm.workRangeForm.startTimeForm.minute", startMinute)
+                .param("actualWorkDateTimeForm.workRangeForm.endTimeForm.hour", endHour)
+                .param("actualWorkDateTimeForm.workRangeForm.endTimeForm.minute", endMinute)
+                .param("actualWorkDateTimeForm.daytimeBreakTime.value.value", daytimeBreakTime)
+                .param("actualWorkDateTimeForm.nightBreakTime.value.value", nightBreakTime)
         )
                 .andExpect(status().isOk())
                 .andExpect(view().name("timerecord/form"))
@@ -130,14 +134,14 @@ class TimeRecordRegisterControllerTest {
                 .thenReturn(new TimeRecords(Collections.emptyList()));
 
         mockMvc.perform(post("/timerecord")
-                .param("employeeNumber", "1")
-                .param("workDate", "2018-01-01")
-                .param("startHour", "9")
-                .param("startMinute", "00")
-                .param("endHour", "26")
-                .param("endMinute", "30")
-                .param("daytimeBreakTime", "0")
-                .param("nightBreakTime", "0")
+                .param("employeeNumber.value", "1")
+                .param("actualWorkDateTimeForm.workRangeForm.workDate.value.value", "2018-01-01")
+                .param("actualWorkDateTimeForm.workRangeForm.startTimeForm.hour", "9")
+                .param("actualWorkDateTimeForm.orkRangeForm.startTimeForm.minute", "00")
+                .param("actualWorkDateTimeForm.workRangeForm.endTimeForm.hour", "26")
+                .param("actualWorkDateTimeForm.workRangeForm.endTimeForm.minute", "30")
+                .param("actualWorkDateTimeForm.daytimeBreakTime.value.value", "0")
+                .param("actualWorkDateTimeForm.nightBreakTime.value.value", "0")
         )
                 .andExpect(redirectedUrlPattern("/attendances/1/*"));
     }
@@ -161,6 +165,6 @@ class TimeRecordRegisterControllerTest {
         ModelAndView modelAndView = mvcResult.getModelAndView();
         AttendanceForm attendanceForm = (AttendanceForm) modelAndView.getModel().get("attendanceForm");
 
-        assertEquals("28", attendanceForm.endHour);
+        assertEquals(28, attendanceForm.actualWorkDateTimeForm.workRangeForm.endTimeForm.hour);
     }
 }

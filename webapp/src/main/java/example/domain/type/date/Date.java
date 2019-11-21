@@ -2,6 +2,7 @@ package example.domain.type.date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
@@ -11,6 +12,7 @@ import java.time.temporal.WeekFields;
  */
 public class Date {
 
+    @NotNull(message = "日付を入力してください。")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate value;
 

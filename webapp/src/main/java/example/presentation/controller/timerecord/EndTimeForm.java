@@ -5,24 +5,31 @@ import example.domain.model.timerecord.timefact.StartDateTime;
 import example.domain.type.date.Date;
 import example.domain.type.datetime.DateTime;
 
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 /**
  * 勤務終了日時
  */
-public class InputEndTime {
+public class EndTimeForm {
+    @Min(0)
     int hour;
+
+    @Min(0)
     int minute;
 
-    InputEndTime(int hour, int minute) {
+    public EndTimeForm() {
+    }
+
+    public EndTimeForm(int hour, int minute) {
         this.hour = hour;
         this.minute = minute;
     }
 
-    public static InputEndTime from(String time) {
+    public static EndTimeForm from(String time) {
         String[] s = time.split(":");
-        return new InputEndTime(Integer.parseInt(s[0]), Integer.parseInt(s[1]));
+        return new EndTimeForm(Integer.parseInt(s[0]), Integer.parseInt(s[1]));
     }
 
     public EndDateTime endDateTime(StartDateTime startDateTime) {
