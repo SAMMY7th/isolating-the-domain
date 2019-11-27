@@ -15,12 +15,12 @@ import java.time.DateTimeException;
 public class AttendanceForm {
 
     EmployeeNumber employeeNumber;
-    String workDate = "";
+    String workDate;
 
-    String startHour = "";
-    String startMinute = "";
-    String endHour = "";
-    String endMinute = "";
+    String startHour;
+    String startMinute;
+    String endHour;
+    String endMinute;
 
     DaytimeBreakTime daytimeBreakTime;
     NightBreakTime nightBreakTime;
@@ -28,7 +28,26 @@ public class AttendanceForm {
     boolean overlapWithPreviousWorkRange;
     boolean overlapWithNextWorkRange;
 
-    public AttendanceForm() {
+    public AttendanceForm(
+        EmployeeNumber employeeNumber,
+        String workDate,
+        String startHour,
+        String startMinute,
+        String endHour,
+        String endMinute,
+        DaytimeBreakTime daytimeBreakTime,
+        NightBreakTime nightBreakTime) {
+
+        this.employeeNumber = employeeNumber;
+        this.workDate = workDate;
+
+        this.startHour = startHour;
+        this.startMinute = startMinute;
+        this.endHour = endHour;
+        this.endMinute = endMinute;
+
+        this.daytimeBreakTime = daytimeBreakTime;
+        this.nightBreakTime = nightBreakTime;
     }
 
     public TimeRecord toTimeRecord() {
