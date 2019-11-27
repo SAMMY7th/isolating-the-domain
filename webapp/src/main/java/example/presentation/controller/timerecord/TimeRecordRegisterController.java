@@ -63,29 +63,21 @@ public class TimeRecordRegisterController {
     @GetMapping
     String init(@RequestParam(value = "employeeNumber", required = false) EmployeeNumber employeeNumber,
                 @RequestParam(value = "workDate", required = false) WorkDate workDate,
-                @ModelAttribute AttendanceForm attendanceForm,
                 Model model) {
-        if (employeeNumber != null) {
-            attendanceForm.employeeNumber = employeeNumber;
-        }
-        if (workDate != null) {
-            attendanceForm.workDate = workDate.toString();
-        }
+        TimeRecord timeRecord;
         if (employeeNumber != null && workDate != null) {
-            TimeRecord timeRecord = timeRecordQueryCoordinator.timeRecord(employeeNumber, workDate);
-            attendanceForm.apply(timeRecord);
+            timeRecord = timeRecordQueryCoordinator.timeRecord(employeeNumber, workDate);
         } else {
-            TimeRecord timeRecord = timeRecordQueryCoordinator.defaultTimeRecord(new WorkDate(new Date(LocalDate.now())));
-            attendanceForm.apply(timeRecord);
+            timeRecord = timeRecordQueryCoordinator.defaultTimeRecord(new WorkDate(new Date(LocalDate.now())));
         }
+        model.addAttribute(timeRecord);
         return "timerecord/form";
     }
 
     @PostMapping
-    String register(@Validated @ModelAttribute("attendanceForm") AttendanceForm attendanceForm,
+    String register(@Validated @ModelAttribute("timeRecord") TimeRecord timeRecord,
                     BindingResult result) {
         if (result.hasErrors()) return "timerecord/form";
-        TimeRecord timeRecord = attendanceForm.toTimeRecord();
 
         Set<ConstraintViolation<TimeRecord>> violations = validator.validate(timeRecord);
         violations.forEach(violation -> {
@@ -103,7 +95,7 @@ public class TimeRecordRegisterController {
 
         WorkMonth workMonth = WorkMonth.from(timeRecord.workDate());
 
-        return "redirect:/attendances/" + attendanceForm.employeeNumber.value() + "/" + workMonth.toString();
+        return "redirect:/attendances/" + timeRecord.employeeNumber().value() + "/" + workMonth.toString();
     }
 
     @InitBinder
