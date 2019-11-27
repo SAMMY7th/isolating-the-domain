@@ -32,14 +32,14 @@ public class AttendanceForm {
     boolean overlapWithNextWorkRange;
 
     public AttendanceForm(
-        EmployeeNumber employeeNumber,
-        String workDate,
-        String startHour,
-        String startMinute,
-        String endHour,
-        String endMinute,
-        DaytimeBreakTime daytimeBreakTime,
-        NightBreakTime nightBreakTime) {
+            EmployeeNumber employeeNumber,
+            String workDate,
+            String startHour,
+            String startMinute,
+            String endHour,
+            String endMinute,
+            DaytimeBreakTime daytimeBreakTime,
+            NightBreakTime nightBreakTime) {
 
         this.employeeNumber = employeeNumber;
         this.workDate = workDate;
@@ -52,8 +52,8 @@ public class AttendanceForm {
         this.daytimeBreakTime = daytimeBreakTime;
         this.nightBreakTime = nightBreakTime;
 
-        // FIXME: どう判定すればいいかあとで考える
-        if (employeeNumber != null) {
+        if (employeeNumber != null && workDate != null && startHour != null && startMinute != null
+                && endHour != null && endMinute != null && daytimeBreakTime != null && nightBreakTime != null) {
             StartDateTime startDateTime = new StartDateTime(DateTime.parse(workDate, startHour, startMinute));
             InputEndTime inputEndTime = new InputEndTime(Integer.parseInt(endHour), Integer.parseInt(endMinute));
             EndDateTime endDateTime = inputEndTime.endDateTime(workStartDateTime());
