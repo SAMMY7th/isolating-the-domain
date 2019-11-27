@@ -9,10 +9,13 @@ import example.domain.type.datetime.DateTime;
 import example.domain.type.time.Minute;
 import example.domain.type.time.Time;
 
+import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import java.time.DateTimeException;
 
 public class AttendanceForm {
+    @Valid
+    TimeRecord timeRecord;
 
     EmployeeNumber employeeNumber;
     String workDate;
@@ -48,6 +51,20 @@ public class AttendanceForm {
 
         this.daytimeBreakTime = daytimeBreakTime;
         this.nightBreakTime = nightBreakTime;
+
+        // FIXME: どう判定すればいいかあとで考える
+        if (employeeNumber != null) {
+            StartDateTime startDateTime = new StartDateTime(DateTime.parse(workDate, startHour, startMinute));
+            InputEndTime inputEndTime = new InputEndTime(Integer.parseInt(endHour), Integer.parseInt(endMinute));
+            EndDateTime endDateTime = inputEndTime.endDateTime(workStartDateTime());
+
+            ActualWorkDateTime actualWorkDateTime = new ActualWorkDateTime(
+                    new WorkRange(startDateTime, endDateTime),
+                    daytimeBreakTime,
+                    nightBreakTime);
+
+            this.timeRecord = new TimeRecord(employeeNumber, actualWorkDateTime);
+        }
     }
 
     public TimeRecord toTimeRecord() {

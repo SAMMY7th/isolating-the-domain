@@ -19,10 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import java.time.LocalDate;
-import java.util.Set;
 
 /**
  * 勤務時間の登録
@@ -35,20 +32,16 @@ public class TimeRecordRegisterController {
     TimeRecordRecordService timeRecordRecordService;
     TimeRecordCoordinator timeRecordCoordinator;
     TimeRecordQueryCoordinator timeRecordQueryCoordinator;
-    Validator validator;
 
     public TimeRecordRegisterController(
             EmployeeQueryService employeeQueryService,
             TimeRecordRecordService timeRecordRecordService,
             TimeRecordCoordinator timeRecordCoordinator,
-            TimeRecordQueryCoordinator timeRecordQueryCoordinator,
-            Validator validator) {
+            TimeRecordQueryCoordinator timeRecordQueryCoordinator) {
         this.employeeQueryService = employeeQueryService;
         this.timeRecordRecordService = timeRecordRecordService;
         this.timeRecordCoordinator = timeRecordCoordinator;
         this.timeRecordQueryCoordinator = timeRecordQueryCoordinator;
-
-        this.validator = validator;
     }
 
     @ModelAttribute("employees")
@@ -97,12 +90,6 @@ public class TimeRecordRegisterController {
                     BindingResult result) {
         if (result.hasErrors()) return "timerecord/form";
         TimeRecord timeRecord = attendanceForm.toTimeRecord();
-
-        Set<ConstraintViolation<TimeRecord>> violations = validator.validate(timeRecord);
-        violations.forEach(violation -> {
-            // FIXME: 今は休憩時間しかチェックしていないのでとりあえず動かしている
-            result.rejectValue("daytimeBreakTime", "", violation.getMessage());
-        });
 
         timeRecordCoordinator.isValid(timeRecord).errors().forEach(error -> {
             result.rejectValue(error.field(), "", error.message());

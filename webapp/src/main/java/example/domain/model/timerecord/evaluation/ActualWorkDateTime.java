@@ -14,6 +14,8 @@ public class ActualWorkDateTime {
     DaytimeBreakTime daytimeBreakTime;
     NightBreakTime nightBreakTime;
 
+    boolean daytimeBreakTimeValid;
+
     @Deprecated
     public ActualWorkDateTime() {
     }
