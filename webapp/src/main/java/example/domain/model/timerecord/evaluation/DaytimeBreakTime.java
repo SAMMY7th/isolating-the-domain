@@ -3,10 +3,14 @@ package example.domain.model.timerecord.evaluation;
 import example.domain.type.time.Minute;
 import example.domain.type.time.QuarterHour;
 
+import javax.validation.Valid;
+
 /**
  * 日中休憩時間
  */
 public class DaytimeBreakTime {
+
+    @Valid
     Minute value;
 
     @Deprecated

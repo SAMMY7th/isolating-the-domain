@@ -3,7 +3,9 @@ package example.domain.model.timerecord.evaluation;
 import example.domain.model.timerecord.timefact.WorkRange;
 import example.domain.type.time.Minute;
 
+import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
+import java.time.DateTimeException;
 
 /**
  * 勤務日時実績
@@ -11,6 +13,8 @@ import javax.validation.constraints.AssertTrue;
 public class ActualWorkDateTime {
 
     WorkRange workRange;
+
+    @Valid
     DaytimeBreakTime daytimeBreakTime;
     NightBreakTime nightBreakTime;
 
@@ -75,8 +79,15 @@ public class ActualWorkDateTime {
 
     @AssertTrue(message = "休憩時間が不正です")
     public boolean isDaytimeBreakTimeValid() {
-        Minute daytimeBindingMinute = daytimeBindingTime().quarterHour().minute();
-        if (daytimeBindingMinute.lessThan(daytimeBreakTime.minute())) {
+        if (daytimeBreakTime == null) return false;
+        // TODO: 先に勤務時間のチェックが必要
+
+        try {
+            Minute daytimeBindingMinute = daytimeBindingTime().quarterHour().minute();
+            if (daytimeBindingMinute.lessThan(daytimeBreakTime.minute())) {
+                return false;
+            }
+        } catch (NumberFormatException | DateTimeException ex) {
             return false;
         }
         return true;
