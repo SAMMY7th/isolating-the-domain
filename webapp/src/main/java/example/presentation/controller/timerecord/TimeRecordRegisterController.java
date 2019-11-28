@@ -51,14 +51,14 @@ public class TimeRecordRegisterController {
 
     @ModelAttribute("attendanceForm")
     AttendanceForm attendanceForm(
-        @RequestParam(required = false) EmployeeNumber employeeNumber,
-        @RequestParam(required = false) WorkDate workDate,
+        @RequestParam(value = "employeeNumber.value", required = false) EmployeeNumber employeeNumber,
+        @RequestParam(value = "workDate.value.value", required = false) WorkDate workDate,
         @RequestParam(required = false) String startHour,
         @RequestParam(required = false) String startMinute,
         @RequestParam(required = false) String endHour,
         @RequestParam(required = false) String endMinute,
-        @RequestParam(required = false) DaytimeBreakTime daytimeBreakTime,
-        @RequestParam(required = false) NightBreakTime nightBreakTime) {
+        @RequestParam(value = "daytimeBreakTime.value.value", required = false) DaytimeBreakTime daytimeBreakTime,
+        @RequestParam(value = "nightBreakTime.value.value", required = false) NightBreakTime nightBreakTime) {
         AttendanceForm attendanceForm =
             new AttendanceForm(employeeNumber, workDate, startHour, startMinute, endHour, endMinute, daytimeBreakTime, nightBreakTime);
         return attendanceForm;
@@ -101,14 +101,14 @@ public class TimeRecordRegisterController {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.setAllowedFields(
-                "employeeNumber",
-                "workDate",
+                "employeeNumber.value",
+                "workDate.value.value",
                 "startHour",
                 "startMinute",
                 "endHour",
                 "endMinute",
-                "daytimeBreakTime",
-                "nightBreakTime"
+                "daytimeBreakTime.value.value",
+                "nightBreakTime.value.value"
         );
     }
 }
