@@ -22,8 +22,8 @@ public class WorkDate {
         value = date;
     }
 
-    public WorkDate(String value) {
-        this(new Date(value));
+    public static WorkDate of(String value) {
+        return new WorkDate(Date.of(value));
     }
 
     public Date value() {

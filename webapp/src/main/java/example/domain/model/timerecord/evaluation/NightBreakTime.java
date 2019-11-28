@@ -18,7 +18,7 @@ public class NightBreakTime {
     }
 
     public NightBreakTime(String value) {
-        this(new Minute(value));
+        this(Minute.of(value));
     }
 
     public NightBreakTime(Minute value) {

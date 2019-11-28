@@ -18,8 +18,8 @@ public class Date {
     public Date() {
     }
 
-    public Date(String value) {
-        this(LocalDate.parse(value, DateTimeFormatter.ISO_DATE));
+    public static Date of(String value) {
+        return new Date(LocalDate.parse(value, DateTimeFormatter.ISO_DATE));
     }
 
     public Date(LocalDate value) {

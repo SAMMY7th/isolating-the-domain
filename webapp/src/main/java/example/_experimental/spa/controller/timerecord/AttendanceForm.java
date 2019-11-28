@@ -55,15 +55,15 @@ class AttendanceForm {
     }
 
     TimeRecord toTimeRecord() {
-        EmployeeNumber employeeNumber = new EmployeeNumber(this.employeeNumber);
+        EmployeeNumber employeeNumber = EmployeeNumber.of(this.employeeNumber);
         return new TimeRecord(employeeNumber, toActualWorkDateTime());
     }
 
     private ActualWorkDateTime toActualWorkDateTime() {
-        Date workDate = new Date(this.workDate);
+        Date workDate = Date.of(this.workDate);
 
-        Minute daytimeBreakMinute = new Minute(daytimeBreakTime);
-        Minute nightBreakTime = new Minute(this.nightBreakTime);
+        Minute daytimeBreakMinute = Minute.of(daytimeBreakTime);
+        Minute nightBreakTime = Minute.of(this.nightBreakTime);
         InputEndTime inputEndTime = new InputEndTime(Integer.valueOf(endHour), Integer.valueOf(endMinute));
         return new ActualWorkDateTime(
                 new WorkRange(
@@ -83,7 +83,7 @@ class AttendanceForm {
     boolean isWorkDateValid() {
         if (!isWorkDateComplete()) return true;
         try {
-            new Date(this.workDate);
+            Date.of(this.workDate);
         } catch (DateTimeException ex) {
             return false;
         }
@@ -155,7 +155,7 @@ class AttendanceForm {
 
     private EndDateTime workEndDateTime() {
         InputEndTime inputEndTime = new InputEndTime(Integer.valueOf(endHour), Integer.valueOf(endMinute));
-        return inputEndTime.endDateTime(new Date(workDate));
+        return inputEndTime.endDateTime(Date.of(workDate));
     }
 
     @AssertTrue(message = "休憩時間が不正です")
@@ -163,7 +163,7 @@ class AttendanceForm {
         if (daytimeBreakTime.isEmpty()) return true;
 
         try {
-            DaytimeBreakTime daytimeBreakTime = new DaytimeBreakTime(new Minute(this.daytimeBreakTime));
+            DaytimeBreakTime daytimeBreakTime = new DaytimeBreakTime(Minute.of(this.daytimeBreakTime));
 
             ActualWorkDateTime actualWorkDateTime = toActualWorkDateTime();
             Minute daytimeBindingMinute = actualWorkDateTime.daytimeBindingTime().quarterHour().minute();
@@ -181,7 +181,7 @@ class AttendanceForm {
         if (nightBreakTime.isEmpty()) return true;
 
         try {
-            NightBreakTime nightBreakTime = new NightBreakTime(new Minute(this.nightBreakTime));
+            NightBreakTime nightBreakTime = new NightBreakTime(Minute.of(this.nightBreakTime));
 
             ActualWorkDateTime actualWorkDateTime = toActualWorkDateTime();
             Minute nightBindingMinute = actualWorkDateTime.nightBindingTime().quarterHour().minute();

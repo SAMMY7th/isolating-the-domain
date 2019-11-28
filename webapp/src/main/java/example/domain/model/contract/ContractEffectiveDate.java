@@ -16,7 +16,7 @@ public class ContractEffectiveDate {
     }
 
     public ContractEffectiveDate(String value) {
-        this(new Date(value));
+        this(Date.of(value));
     }
 
     public ContractEffectiveDate(Date value) {
