@@ -16,11 +16,20 @@ public class AttendanceForm {
     @Valid
     TimeRecord timeRecord;
 
+    @Valid
+    EmployeeNumber employeeNumber;
+
     String workDate;
     String startHour;
     String startMinute;
     String endHour;
     String endMinute;
+
+    @Valid
+    DaytimeBreakTime daytimeBreakTime;
+
+    @Valid
+    NightBreakTime nightBreakTime;
 
     boolean overlapWithPreviousWorkRange;
     boolean overlapWithNextWorkRange;
@@ -35,11 +44,14 @@ public class AttendanceForm {
             DaytimeBreakTime daytimeBreakTime,
             NightBreakTime nightBreakTime) {
 
+        this.employeeNumber = employeeNumber;
         this.workDate = workDate;
         this.startHour = startHour;
         this.startMinute = startMinute;
         this.endHour = endHour;
         this.endMinute = endMinute;
+        this.daytimeBreakTime = daytimeBreakTime;
+        this.nightBreakTime = nightBreakTime;
 
         if (employeeNumber != null && workDate != null && startHour != null && startMinute != null
                 && endHour != null && endMinute != null && daytimeBreakTime != null && nightBreakTime != null) {
@@ -80,6 +92,7 @@ public class AttendanceForm {
     }
 
     public void apply(TimeRecord timeRecord) {
+        this.employeeNumber = timeRecord.employeeNumber();
         this.workDate = timeRecord.workDate().toString();
 
         String[] startClockTime = timeRecord.actualWorkDateTime().workRange().start().toString().split(" ")[1].split(":");
@@ -89,6 +102,9 @@ public class AttendanceForm {
         String[] endClockTime = timeRecord.actualWorkDateTime().workRange().endTimeText().split(":");
         this.endHour = endClockTime[0];
         this.endMinute = endClockTime[1];
+
+        this.daytimeBreakTime = timeRecord.actualWorkDateTime().daytimeBreakTime();
+        this.nightBreakTime = timeRecord.actualWorkDateTime().nightBreakTime();
 
         this.timeRecord = timeRecord;
     }

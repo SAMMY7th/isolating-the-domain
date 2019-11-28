@@ -13,11 +13,7 @@ import java.time.DateTimeException;
 public class ActualWorkDateTime {
 
     WorkRange workRange;
-
-    @Valid
     DaytimeBreakTime daytimeBreakTime;
-
-    @Valid
     NightBreakTime nightBreakTime;
 
     boolean daytimeBreakTimeValid;

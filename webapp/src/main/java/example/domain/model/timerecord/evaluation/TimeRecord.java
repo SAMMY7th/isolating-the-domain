@@ -9,7 +9,6 @@ import javax.validation.Valid;
  */
 public class TimeRecord {
 
-    @Valid
     EmployeeNumber employeeNumber;
 
     @Valid

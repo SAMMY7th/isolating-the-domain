@@ -104,14 +104,14 @@ public class TimeRecordRegisterController {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.setAllowedFields(
-                "timeRecord.employeeNumber",
+                "employeeNumber",
                 "workDate",
                 "startHour",
                 "startMinute",
                 "endHour",
                 "endMinute",
-                "timeRecord.actualWorkDateTime.daytimeBreakTime.value.value",
-                "timeRecord.actualWorkDateTime.nightBreakTime.value.value"
+                "daytimeBreakTime",
+                "nightBreakTime"
         );
     }
 }
