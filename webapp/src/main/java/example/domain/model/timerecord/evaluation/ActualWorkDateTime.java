@@ -83,7 +83,7 @@ public class ActualWorkDateTime {
     @AssertTrue(message = "休憩時間が不正です")
     public boolean isDaytimeBreakTimeValid() {
         if (daytimeBreakTime == null) return false;
-        // TODO: 先に勤務時間のチェックが必要
+        if (workRange == null) return true;
 
         try {
             Minute daytimeBindingMinute = daytimeBindingTime().quarterHour().minute();
@@ -99,7 +99,7 @@ public class ActualWorkDateTime {
     @AssertTrue(message = "休憩時間（深夜）が不正です")
     public boolean isNightBreakTimeValid() {
         if (nightBreakTime == null) return false;
-        // TODO: 先に勤務時間のチェックが必要
+        if (workRange == null) return true;
 
         try {
             Minute nightBindingMinute = nightBindingTime().quarterHour().minute();
