@@ -135,14 +135,18 @@
         <div class="two fields">
           <div class="ui right labeled small input field">
             <input class="short-input" type="text" placeholder="15"
-                   th:field="*{nightBreakTime}"
+                   th:field="*{timeRecord.actualWorkDateTime.nightBreakTime.value.value}"
             />
             <div class="ui basic label">分</div>
           </div>
         </div>
         <div class="ui pointing red basic label"
-             th:if="${#fields.hasErrors('nightBreakTimeValid')}">
-          <span th:errors="*{nightBreakTimeValid}">休憩時間（深夜）が不正です</span>
+             th:if="${#fields.hasErrors('timeRecord.actualWorkDateTime.nightBreakTime.value.value')}">
+          <span th:errors="*{timeRecord.actualWorkDateTime.nightBreakTime.value.value}">休憩時間（深夜）が不正です</span>
+        </div>
+        <div class="ui pointing red basic label"
+             th:if="${#fields.hasErrors('timeRecord.actualWorkDateTime.nightBreakTimeValid')}">
+          <span th:errors="*{timeRecord.actualWorkDateTime.nightBreakTimeValid}">休憩時間（深夜）が不正です</span>
         </div>
       </div>
 

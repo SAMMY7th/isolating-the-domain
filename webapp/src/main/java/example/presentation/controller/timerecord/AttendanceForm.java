@@ -6,7 +6,6 @@ import example.domain.model.timerecord.timefact.EndDateTime;
 import example.domain.model.timerecord.timefact.StartDateTime;
 import example.domain.model.timerecord.timefact.WorkRange;
 import example.domain.type.datetime.DateTime;
-import example.domain.type.time.Minute;
 import example.domain.type.time.Time;
 
 import javax.validation.Valid;
@@ -24,8 +23,6 @@ public class AttendanceForm {
     String startMinute;
     String endHour;
     String endMinute;
-
-    NightBreakTime nightBreakTime;
 
     boolean overlapWithPreviousWorkRange;
     boolean overlapWithNextWorkRange;
@@ -48,8 +45,6 @@ public class AttendanceForm {
         this.endHour = endHour;
         this.endMinute = endMinute;
 
-        this.nightBreakTime = nightBreakTime;
-
         if (employeeNumber != null && workDate != null && startHour != null && startMinute != null
                 && endHour != null && endMinute != null && daytimeBreakTime != null && nightBreakTime != null) {
             StartDateTime startDateTime = new StartDateTime(DateTime.parse(workDate, startHour, startMinute));
@@ -71,7 +66,7 @@ public class AttendanceForm {
     }
 
     private ActualWorkDateTime toActualWorkDateTime() {
-        return toActualWorkDateTime(workStartDateTime(), workEndDateTime(), timeRecord.actualWorkDateTime().daytimeBreakTime(), nightBreakTime);
+        return toActualWorkDateTime(workStartDateTime(), workEndDateTime(), timeRecord.actualWorkDateTime().daytimeBreakTime(), timeRecord.actualWorkDateTime().nightBreakTime());
     }
 
     private static ActualWorkDateTime toActualWorkDateTime(StartDateTime startDateTime, EndDateTime endDateTime, DaytimeBreakTime daytimeBreakTime, NightBreakTime nightBreakTime) {
@@ -100,8 +95,6 @@ public class AttendanceForm {
         String[] endClockTime = timeRecord.actualWorkDateTime().workRange().endTimeText().split(":");
         this.endHour = endClockTime[0];
         this.endMinute = endClockTime[1];
-
-        this.nightBreakTime = timeRecord.actualWorkDateTime().nightBreakTime();
 
         this.timeRecord = timeRecord;
     }
@@ -206,23 +199,5 @@ public class AttendanceForm {
         if (endDateTime.isAfter(startDateTime)) return true;
 
         return false;
-    }
-
-    boolean nightBreakTimeValid;
-
-    @AssertTrue(message = "休憩時間（深夜）が不正です")
-    public boolean isNightBreakTimeValid() {
-        if (nightBreakTime == null) return false;
-        if (unnecessaryCalculate() || !isWorkTimeValid()) return true;
-
-        try {
-            Minute nightBindingMinute = toActualWorkDateTime().nightBindingTime().quarterHour().minute();
-            if (nightBindingMinute.lessThan(nightBreakTime.minute())) {
-                return false;
-            }
-        } catch (NumberFormatException | DateTimeException ex) {
-            return false;
-        }
-        return true;
     }
 }

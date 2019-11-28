@@ -114,7 +114,7 @@ public class TimeRecordRegisterController {
                 "endHour",
                 "endMinute",
                 "timeRecord.actualWorkDateTime.daytimeBreakTime.value.value",
-                "nightBreakTime"
+                "timeRecord.actualWorkDateTime.nightBreakTime.value.value"
         );
     }
 }

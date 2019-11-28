@@ -16,9 +16,12 @@ public class ActualWorkDateTime {
 
     @Valid
     DaytimeBreakTime daytimeBreakTime;
+
+    @Valid
     NightBreakTime nightBreakTime;
 
     boolean daytimeBreakTimeValid;
+    boolean nightBreakTimeValid;
 
     @Deprecated
     public ActualWorkDateTime() {
@@ -92,4 +95,21 @@ public class ActualWorkDateTime {
         }
         return true;
     }
+
+    @AssertTrue(message = "休憩時間（深夜）が不正です")
+    public boolean isNightBreakTimeValid() {
+        if (nightBreakTime == null) return false;
+        // TODO: 先に勤務時間のチェックが必要
+
+        try {
+            Minute nightBindingMinute = nightBindingTime().quarterHour().minute();
+            if (nightBindingMinute.lessThan(nightBreakTime.minute())) {
+                return false;
+            }
+        } catch (NumberFormatException | DateTimeException ex) {
+            return false;
+        }
+        return true;
+    }
+
 }
