@@ -16,9 +16,7 @@ public class AttendanceForm {
     @Valid
     TimeRecord timeRecord;
 
-    EmployeeNumber employeeNumber;
     String workDate;
-
     String startHour;
     String startMinute;
     String endHour;
@@ -37,9 +35,7 @@ public class AttendanceForm {
             DaytimeBreakTime daytimeBreakTime,
             NightBreakTime nightBreakTime) {
 
-        this.employeeNumber = employeeNumber;
         this.workDate = workDate;
-
         this.startHour = startHour;
         this.startMinute = startMinute;
         this.endHour = endHour;
@@ -61,12 +57,11 @@ public class AttendanceForm {
     }
 
     public TimeRecord toTimeRecord() {
-        ActualWorkDateTime actualWorkDateTime = toActualWorkDateTime();
-        return new TimeRecord(employeeNumber, actualWorkDateTime);
+        return timeRecord;
     }
 
     private ActualWorkDateTime toActualWorkDateTime() {
-        return toActualWorkDateTime(workStartDateTime(), workEndDateTime(), timeRecord.actualWorkDateTime().daytimeBreakTime(), timeRecord.actualWorkDateTime().nightBreakTime());
+        return timeRecord.actualWorkDateTime();
     }
 
     private static ActualWorkDateTime toActualWorkDateTime(StartDateTime startDateTime, EndDateTime endDateTime, DaytimeBreakTime daytimeBreakTime, NightBreakTime nightBreakTime) {
@@ -85,7 +80,6 @@ public class AttendanceForm {
     }
 
     public void apply(TimeRecord timeRecord) {
-        this.employeeNumber = timeRecord.employeeNumber();
         this.workDate = timeRecord.workDate().toString();
 
         String[] startClockTime = timeRecord.actualWorkDateTime().workRange().start().toString().split(" ")[1].split(":");

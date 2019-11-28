@@ -69,9 +69,6 @@ public class TimeRecordRegisterController {
                 @RequestParam(value = "workDate", required = false) WorkDate workDate,
                 @ModelAttribute AttendanceForm attendanceForm,
                 Model model) {
-        if (employeeNumber != null) {
-            attendanceForm.employeeNumber = employeeNumber;
-        }
         if (workDate != null) {
             attendanceForm.workDate = workDate.toString();
         }
@@ -101,13 +98,13 @@ public class TimeRecordRegisterController {
 
         WorkMonth workMonth = WorkMonth.from(timeRecord.workDate());
 
-        return "redirect:/attendances/" + attendanceForm.employeeNumber.value() + "/" + workMonth.toString();
+        return "redirect:/attendances/" + timeRecord.employeeNumber().value() + "/" + workMonth.toString();
     }
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.setAllowedFields(
-                "employeeNumber",
+                "timeRecord.employeeNumber",
                 "workDate",
                 "startHour",
                 "startMinute",
