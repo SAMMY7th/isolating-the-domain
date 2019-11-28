@@ -10,6 +10,7 @@ import example.domain.type.time.Time;
 
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.NotNull;
 import java.time.DateTimeException;
 
 public class AttendanceForm {
@@ -19,7 +20,10 @@ public class AttendanceForm {
     @Valid
     EmployeeNumber employeeNumber;
 
-    String workDate;
+    @NotNull(message = "勤務日を入力してください。")
+    @Valid
+    WorkDate workDate;
+
     String startHour;
     String startMinute;
     String endHour;
@@ -36,7 +40,7 @@ public class AttendanceForm {
 
     public AttendanceForm(
             EmployeeNumber employeeNumber,
-            String workDate,
+            WorkDate workDate,
             String startHour,
             String startMinute,
             String endHour,
@@ -55,7 +59,7 @@ public class AttendanceForm {
 
         if (employeeNumber != null && workDate != null && startHour != null && startMinute != null
                 && endHour != null && endMinute != null && daytimeBreakTime != null && nightBreakTime != null) {
-            StartDateTime startDateTime = new StartDateTime(DateTime.parse(workDate, startHour, startMinute));
+            StartDateTime startDateTime = new StartDateTime(DateTime.parse(workDate.toString(), startHour, startMinute));
             InputEndTime inputEndTime = new InputEndTime(Integer.parseInt(endHour), Integer.parseInt(endMinute));
             EndDateTime endDateTime = inputEndTime.endDateTime(workStartDateTime());
 
@@ -93,7 +97,7 @@ public class AttendanceForm {
 
     public void apply(TimeRecord timeRecord) {
         this.employeeNumber = timeRecord.employeeNumber();
-        this.workDate = timeRecord.workDate().toString();
+        this.workDate = timeRecord.workDate();
 
         String[] startClockTime = timeRecord.actualWorkDateTime().workRange().start().toString().split(" ")[1].split(":");
         this.startHour = startClockTime[0];
@@ -118,7 +122,7 @@ public class AttendanceForm {
     }
 
     private StartDateTime workStartDateTime() {
-        return new StartDateTime(DateTime.parse(workDate, startHour, startMinute));
+        return new StartDateTime(DateTime.parse(workDate.toString(), startHour, startMinute));
     }
 
     private EndDateTime workEndDateTime() {
@@ -128,21 +132,16 @@ public class AttendanceForm {
 
     boolean workDateComplete;
 
-    @AssertTrue(message = "勤務日を入力してください")
+    // TODO: あとでけす
     boolean isWorkDateComplete() {
-        return !workDate.isEmpty();
+        return workDate != null;
     }
 
     boolean workDateValid;
 
-    @AssertTrue(message = "勤務日が不正です")
+    // TODO: あとでけす
     boolean isWorkDateValid() {
         if (!isWorkDateComplete()) return true;
-        try {
-            new WorkDate(this.workDate);
-        } catch (DateTimeException ex) {
-            return false;
-        }
         return true;
     }
 

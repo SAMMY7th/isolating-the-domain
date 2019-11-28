@@ -52,7 +52,7 @@ public class TimeRecordRegisterController {
     @ModelAttribute("attendanceForm")
     AttendanceForm attendanceForm(
         @RequestParam(required = false) EmployeeNumber employeeNumber,
-        @RequestParam(required = false) String workDate,
+        @RequestParam(required = false) WorkDate workDate,
         @RequestParam(required = false) String startHour,
         @RequestParam(required = false) String startMinute,
         @RequestParam(required = false) String endHour,
@@ -69,9 +69,6 @@ public class TimeRecordRegisterController {
                 @RequestParam(value = "workDate", required = false) WorkDate workDate,
                 @ModelAttribute AttendanceForm attendanceForm,
                 Model model) {
-        if (workDate != null) {
-            attendanceForm.workDate = workDate.toString();
-        }
         if (employeeNumber != null && workDate != null) {
             TimeRecord timeRecord = timeRecordQueryCoordinator.timeRecord(employeeNumber, workDate);
             attendanceForm.apply(timeRecord);
