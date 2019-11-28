@@ -15,9 +15,6 @@ import java.time.DateTimeException;
 
 public class AttendanceForm {
     @Valid
-    TimeRecord timeRecord;
-
-    @Valid
     EmployeeNumber employeeNumber;
 
     @NotNull(message = "勤務日を入力してください。")
@@ -34,6 +31,9 @@ public class AttendanceForm {
 
     @Valid
     NightBreakTime nightBreakTime;
+
+    @Valid
+    TimeRecord timeRecord; // バリデーションをうごかすための存在
 
     boolean overlapWithPreviousWorkRange;
     boolean overlapWithNextWorkRange;
