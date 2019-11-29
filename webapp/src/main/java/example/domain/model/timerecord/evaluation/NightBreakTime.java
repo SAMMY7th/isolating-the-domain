@@ -17,12 +17,12 @@ public class NightBreakTime {
     NightBreakTime() {
     }
 
-    public NightBreakTime(String value) {
-        this(Minute.from(value));
-    }
-
     public NightBreakTime(Minute value) {
         this.value = value;
+    }
+
+    public static NightBreakTime from(String value) {
+        return new NightBreakTime(Minute.from(value));
     }
 
     public Minute minute() {

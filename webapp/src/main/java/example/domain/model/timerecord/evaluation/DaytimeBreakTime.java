@@ -17,12 +17,12 @@ public class DaytimeBreakTime {
     DaytimeBreakTime() {
     }
 
-    public DaytimeBreakTime(String value) {
-        this(Minute.from(value));
-    }
-
     public DaytimeBreakTime(Minute value) {
         this.value = value;
+    }
+
+    public static DaytimeBreakTime from(String value) {
+        return new DaytimeBreakTime(Minute.from(value));
     }
 
     public Minute minute() {

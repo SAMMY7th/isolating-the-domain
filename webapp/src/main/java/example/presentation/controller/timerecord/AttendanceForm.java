@@ -62,8 +62,8 @@ public class AttendanceForm {
 
             ActualWorkDateTime actualWorkDateTime = new ActualWorkDateTime(
                     new WorkRange(startDateTime, endDateTime),
-                    new DaytimeBreakTime(daytimeBreakTime),
-                    new NightBreakTime(nightBreakTime));
+                    DaytimeBreakTime.from(daytimeBreakTime),
+                    NightBreakTime.from(nightBreakTime));
 
             this.timeRecord = new TimeRecord(employeeNumber, actualWorkDateTime);
         }
@@ -89,7 +89,7 @@ public class AttendanceForm {
     public static ActualWorkDateTime toActualWorkDateTime(String startDate, String startTime, String endTime, String daytimeBreak, String nightBreak) {
         StartDateTime startDateTime = new StartDateTime(DateTime.parse(startDate, startTime));
         EndDateTime endDateTime = InputEndTime.from(endTime).endDateTime(startDateTime);
-        return toActualWorkDateTime(startDateTime, endDateTime, new DaytimeBreakTime(daytimeBreak), new NightBreakTime(nightBreak));
+        return toActualWorkDateTime(startDateTime, endDateTime, DaytimeBreakTime.from(daytimeBreak), NightBreakTime.from(nightBreak));
     }
 
     public void apply(TimeRecord timeRecord) {
