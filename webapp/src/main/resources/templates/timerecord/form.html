@@ -21,7 +21,7 @@
       <div class="field">
         <label>氏名</label>
         <div class="eight wide field">
-          <select class="ui search dropdown" th:field="*{employeeNumber.value}">
+          <select class="ui search dropdown" th:field="*{employeeNumber}">
             <option th:each="employee : ${employees.list()}" th:value="${employee.employeeNumber()}" th:text="${employee.name()}">
               DUMMY
             </option>
@@ -33,7 +33,7 @@
         <label>勤務日</label>
         <div class="eight wide field">
           <input class="short-input" type="date" placeholder="2018-01-01"
-                 th:field="*{workDate.value.value}"/>
+                 th:field="*{workDate}"/>
         </div>
         <div class="ui pointing red basic label"
              th:if="${#fields.hasErrors('workDateComplete')}">
@@ -115,14 +115,14 @@
         <div class="two fields">
           <div class="ui right labeled small input field">
             <input class="short-input" type="text" placeholder="15"
-                   th:field="*{daytimeBreakTime.value.value}"
+                   th:field="*{daytimeBreakTime}"
             />
             <div class="ui basic label">分</div>
           </div>
         </div>
         <div class="ui pointing red basic label"
-             th:if="${#fields.hasErrors('daytimeBreakTime.value.value')}">
-          <span th:errors="*{daytimeBreakTime.value.value}">休憩時間が不正です</span>
+             th:if="${#fields.hasErrors('daytimeBreakTime')}">
+          <span th:errors="*{daytimeBreakTime}">休憩時間が不正です</span>
         </div>
         <div class="ui pointing red basic label"
              th:if="${#fields.hasErrors('timeRecord.actualWorkDateTime.daytimeBreakTimeValid')}">
@@ -135,14 +135,14 @@
         <div class="two fields">
           <div class="ui right labeled small input field">
             <input class="short-input" type="text" placeholder="15"
-                   th:field="*{nightBreakTime.value.value}"
+                   th:field="*{nightBreakTime}"
             />
             <div class="ui basic label">分</div>
           </div>
         </div>
         <div class="ui pointing red basic label"
-             th:if="${#fields.hasErrors('nightBreakTime.value.value')}">
-          <span th:errors="*{nightBreakTime.value.value}">休憩時間（深夜）が不正です</span>
+             th:if="${#fields.hasErrors('nightBreakTime')}">
+          <span th:errors="*{nightBreakTime}">休憩時間（深夜）が不正です</span>
         </div>
         <div class="ui pointing red basic label"
              th:if="${#fields.hasErrors('timeRecord.actualWorkDateTime.nightBreakTimeValid')}">
