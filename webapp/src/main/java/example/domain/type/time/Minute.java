@@ -13,7 +13,7 @@ public class Minute {
     Minute() {
     }
 
-    public static Minute of(String time) {
+    public static Minute from(String time) {
         Integer value = time.isEmpty() ? 0 : Integer.parseInt(time);
         if (value < 0) {
             throw new DateTimeException("分が負の値になっています");

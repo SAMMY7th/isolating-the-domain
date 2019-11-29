@@ -18,7 +18,7 @@ public class Date {
     public Date() {
     }
 
-    public static Date of(String value) {
+    public static Date from(String value) {
         return new Date(LocalDate.parse(value, DateTimeFormatter.ISO_DATE));
     }
 

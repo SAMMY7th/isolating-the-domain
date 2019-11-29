@@ -22,8 +22,8 @@ public class WorkDate {
         value = date;
     }
 
-    public static WorkDate of(String value) {
-        return new WorkDate(Date.of(value));
+    public static WorkDate from(String value) {
+        return new WorkDate(Date.from(value));
     }
 
     public Date value() {
