@@ -1,7 +1,10 @@
 package example.presentation.controller.timerecord;
 
 import example.domain.model.employee.EmployeeNumber;
-import example.domain.model.timerecord.evaluation.*;
+import example.domain.model.timerecord.evaluation.ActualWorkDateTime;
+import example.domain.model.timerecord.evaluation.DaytimeBreakTime;
+import example.domain.model.timerecord.evaluation.NightBreakTime;
+import example.domain.model.timerecord.evaluation.TimeRecord;
 import example.domain.model.timerecord.timefact.EndDateTime;
 import example.domain.model.timerecord.timefact.StartDateTime;
 import example.domain.model.timerecord.timefact.WorkRange;
@@ -10,27 +13,21 @@ import example.domain.type.time.Time;
 
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.NotNull;
 import java.time.DateTimeException;
 
 public class AttendanceForm {
     @Valid
     EmployeeNumber employeeNumber;
 
-    @NotNull(message = "勤務日を入力してください。")
-    @Valid
-    WorkDate workDate;
+    String workDate;
 
     String startHour;
     String startMinute;
     String endHour;
     String endMinute;
 
-    @Valid
-    DaytimeBreakTime daytimeBreakTime;
-
-    @Valid
-    NightBreakTime nightBreakTime;
+    String daytimeBreakTime;
+    String nightBreakTime;
 
     @Valid
     TimeRecord timeRecord; // バリデーションをうごかすための存在
@@ -40,13 +37,13 @@ public class AttendanceForm {
 
     public AttendanceForm(
             EmployeeNumber employeeNumber,
-            WorkDate workDate,
+            String workDate,
             String startHour,
             String startMinute,
             String endHour,
             String endMinute,
-            DaytimeBreakTime daytimeBreakTime,
-            NightBreakTime nightBreakTime) {
+            String daytimeBreakTime,
+            String nightBreakTime) {
 
         this.employeeNumber = employeeNumber;
         this.workDate = workDate;
@@ -65,8 +62,8 @@ public class AttendanceForm {
 
             ActualWorkDateTime actualWorkDateTime = new ActualWorkDateTime(
                     new WorkRange(startDateTime, endDateTime),
-                    daytimeBreakTime,
-                    nightBreakTime);
+                    new DaytimeBreakTime(daytimeBreakTime),
+                    new NightBreakTime(nightBreakTime));
 
             this.timeRecord = new TimeRecord(employeeNumber, actualWorkDateTime);
         }
@@ -97,7 +94,7 @@ public class AttendanceForm {
 
     public void apply(TimeRecord timeRecord) {
         this.employeeNumber = timeRecord.employeeNumber();
-        this.workDate = timeRecord.workDate();
+        this.workDate = timeRecord.workDate().toString();
 
         String[] startClockTime = timeRecord.actualWorkDateTime().workRange().start().toString().split(" ")[1].split(":");
         this.startHour = startClockTime[0];
@@ -107,8 +104,8 @@ public class AttendanceForm {
         this.endHour = endClockTime[0];
         this.endMinute = endClockTime[1];
 
-        this.daytimeBreakTime = timeRecord.actualWorkDateTime().daytimeBreakTime();
-        this.nightBreakTime = timeRecord.actualWorkDateTime().nightBreakTime();
+        this.daytimeBreakTime = timeRecord.actualWorkDateTime().daytimeBreakTime().toString();
+        this.nightBreakTime = timeRecord.actualWorkDateTime().nightBreakTime().toString();
 
         this.timeRecord = timeRecord;
     }

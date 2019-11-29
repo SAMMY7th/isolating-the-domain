@@ -7,8 +7,6 @@ import example.application.service.timerecord.TimeRecordRecordService;
 import example.domain.model.attendance.WorkMonth;
 import example.domain.model.employee.ContractingEmployees;
 import example.domain.model.employee.EmployeeNumber;
-import example.domain.model.timerecord.evaluation.DaytimeBreakTime;
-import example.domain.model.timerecord.evaluation.NightBreakTime;
 import example.domain.model.timerecord.evaluation.TimeRecord;
 import example.domain.model.timerecord.evaluation.WorkDate;
 import example.domain.type.date.Date;
@@ -52,13 +50,13 @@ public class TimeRecordRegisterController {
     @ModelAttribute("attendanceForm")
     AttendanceForm attendanceForm(
         @RequestParam(required = false) EmployeeNumber employeeNumber,
-        @RequestParam(required = false) WorkDate workDate,
+        @RequestParam(required = false) String workDate,
         @RequestParam(required = false) String startHour,
         @RequestParam(required = false) String startMinute,
         @RequestParam(required = false) String endHour,
         @RequestParam(required = false) String endMinute,
-        @RequestParam(required = false) DaytimeBreakTime daytimeBreakTime,
-        @RequestParam(required = false) NightBreakTime nightBreakTime) {
+        @RequestParam(required = false) String daytimeBreakTime,
+        @RequestParam(required = false) String nightBreakTime) {
         AttendanceForm attendanceForm =
             new AttendanceForm(employeeNumber, workDate, startHour, startMinute, endHour, endMinute, daytimeBreakTime, nightBreakTime);
         return attendanceForm;
