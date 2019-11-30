@@ -7,11 +7,11 @@ import example.domain.model.timerecord.timefact.StartDateTime;
 import example.domain.model.timerecord.timefact.WorkRange;
 import example.domain.type.datetime.DateTime;
 import example.domain.type.time.Time;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.time.DateTimeException;
 
 public class AttendanceForm {
@@ -19,18 +19,23 @@ public class AttendanceForm {
     EmployeeNumber employeeNumber;
 
     @NotBlank(message = "勤務日を入力してください")
+    @Pattern(regexp = "^([MTSH]\\d{1,2}|\\d{2,4})/?(0?[1-9]|1[0-2])/?(0?[1-9]|[1-2][0-9]|3[0-1])$", message = "勤務日が不正です")
     String workDate;
 
     @NotBlank(message = "開始時刻を入力してください")
+    @Pattern(regexp = "^\\\\d$", message = "開始時刻が不正です")
     String startHour;
 
     @NotBlank(message = "開始時刻を入力してください")
+    @Pattern(regexp = "^\\\\d$", message = "開始時刻が不正です")
     String startMinute;
 
     @NotBlank(message = "終了時刻を入力してください")
+    @Pattern(regexp = "^\\\\d$", message = "終了時刻が不正です")
     String endHour;
 
     @NotBlank(message = "終了時刻を入力してください")
+    @Pattern(regexp = "^\\\\d$", message = "終了時刻が不正です")
     String endMinute;
 
     String daytimeBreakTime;
@@ -162,7 +167,6 @@ public class AttendanceForm {
 
     boolean startTimeValid;
 
-    @AssertTrue(message = "開始時刻が不正です")
     public boolean isStartTimeValid() {
         if (!isStartTimeComplete()) return true;
 
