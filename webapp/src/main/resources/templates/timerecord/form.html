@@ -36,8 +36,8 @@
                  th:field="*{workDate}"/>
         </div>
         <div class="ui pointing red basic label"
-             th:if="${#fields.hasErrors('workDateComplete')}">
-          <span th:errors="*{workDateComplete}">勤務日を入力してください</span>
+             th:if="${#fields.hasErrors('workDate')}">
+          <span th:errors="*{workDate}">勤務日を入力してください</span>
         </div>
         <div class="ui pointing red basic label"
              th:if="${#fields.hasErrors('workDateValid')}">
@@ -62,8 +62,12 @@
           </div>
         </div>
         <div class="ui pointing red basic label"
-             th:if="${#fields.hasErrors('startTimeComplete')}">
-          <span th:errors="*{startTimeComplete}">開始時刻を入力してください</span>
+             th:if="${#fields.hasErrors('startHour')}">
+          <span th:errors="*{startHour}">開始時刻を入力してください</span>
+        </div>
+        <div class="ui pointing red basic label"
+             th:if="${#fields.hasErrors('startMinute')}">
+          <span th:errors="*{startMinute}">開始時刻を入力してください</span>
         </div>
         <div class="ui pointing red basic label"
              th:if="${#fields.hasErrors('startTimeValid')}">
@@ -93,8 +97,12 @@
           </div>
         </div>
         <div class="ui pointing red basic label"
-             th:if="${#fields.hasErrors('endTimeComplete')}">
-          <span th:errors="*{endTimeComplete}">終了時刻を入力してください</span>
+             th:if="${#fields.hasErrors('endHour')}">
+          <span th:errors="*{endHour}">終了時刻を入力してください</span>
+        </div>
+        <div class="ui pointing red basic label"
+             th:if="${#fields.hasErrors('endMinute')}">
+          <span th:errors="*{endMinute}">終了時刻を入力してください</span>
         </div>
         <div class="ui pointing red basic label"
              th:if="${#fields.hasErrors('endTimeValid')}">

@@ -1,29 +1,36 @@
 package example.presentation.controller.timerecord;
 
 import example.domain.model.employee.EmployeeNumber;
-import example.domain.model.timerecord.evaluation.ActualWorkDateTime;
-import example.domain.model.timerecord.evaluation.DaytimeBreakTime;
-import example.domain.model.timerecord.evaluation.NightBreakTime;
-import example.domain.model.timerecord.evaluation.TimeRecord;
+import example.domain.model.timerecord.evaluation.*;
 import example.domain.model.timerecord.timefact.EndDateTime;
 import example.domain.model.timerecord.timefact.StartDateTime;
 import example.domain.model.timerecord.timefact.WorkRange;
 import example.domain.type.datetime.DateTime;
 import example.domain.type.time.Time;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.NotBlank;
 import java.time.DateTimeException;
 
 public class AttendanceForm {
     @Valid
     EmployeeNumber employeeNumber;
 
+    @NotBlank(message = "勤務日を入力してください")
     String workDate;
 
+    @NotBlank(message = "開始時刻を入力してください")
     String startHour;
+
+    @NotBlank(message = "開始時刻を入力してください")
     String startMinute;
+
+    @NotBlank(message = "終了時刻を入力してください")
     String endHour;
+
+    @NotBlank(message = "終了時刻を入力してください")
     String endMinute;
 
     String daytimeBreakTime;
@@ -56,7 +63,9 @@ public class AttendanceForm {
 
         if (employeeNumber != null && workDate != null && startHour != null && startMinute != null
                 && endHour != null && endMinute != null && daytimeBreakTime != null && nightBreakTime != null) {
-            StartDateTime startDateTime = new StartDateTime(DateTime.parse(workDate.toString(), startHour, startMinute));
+            if (unnecessaryCalculate()) return;
+
+            StartDateTime startDateTime = new StartDateTime(DateTime.parse(workDate, startHour, startMinute));
             InputEndTime inputEndTime = new InputEndTime(Integer.parseInt(endHour), Integer.parseInt(endMinute));
             EndDateTime endDateTime = inputEndTime.endDateTime(workStartDateTime());
 
@@ -119,7 +128,7 @@ public class AttendanceForm {
     }
 
     private StartDateTime workStartDateTime() {
-        return new StartDateTime(DateTime.parse(workDate.toString(), startHour, startMinute));
+        return new StartDateTime(DateTime.parse(workDate, startHour, startMinute));
     }
 
     private EndDateTime workEndDateTime() {
@@ -129,22 +138,23 @@ public class AttendanceForm {
 
     boolean workDateComplete;
 
-    // TODO: あとでけす
     boolean isWorkDateComplete() {
-        return workDate != null;
+        return !workDate.isEmpty();
     }
 
     boolean workDateValid;
 
-    // TODO: あとでけす
     boolean isWorkDateValid() {
         if (!isWorkDateComplete()) return true;
+        try {
+            WorkDate.from(this.workDate);
+        } catch (DateTimeException ex) {
+            return false;
+        }
         return true;
     }
-
     boolean startTimeComplete;
 
-    @AssertTrue(message = "開始時刻を入力してください")
     boolean isStartTimeComplete() {
         if (startHour.isEmpty() || startMinute.isEmpty()) return false;
         return true;
@@ -167,7 +177,6 @@ public class AttendanceForm {
 
     boolean endTimeComplete;
 
-    @AssertTrue(message = "終了時刻を入力してください")
     boolean isEndTimeComplete() {
         if (endHour.isEmpty() || endMinute.isEmpty()) return false;
         return true;
